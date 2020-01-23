@@ -1,0 +1,1256 @@
+﻿This file contains development notes taken as I went along.
+
+1/24/2018 - Started development in earnest.  MySQLFramework had already been developed
+earlier, as had main form.  Created a form for adding a new machine, and shuffled around
+code for SQL until it ended up where I think I want it.
+
+1/26/2018 - Modified table machine and table counter.  Updated macihine.cs in Entities, and
+brought in table idcounter (which I will need when creating any entity in the application). 
+Changed SQLToEntity.pl script to add a namespace parameter, and also had it output a 
+using MySQLFramework statement to avoid having to do a whole bunch of casts.  
+Created a class IdCounter to handle getting and incrementing the counter.
+Created first test machine name and counter incremented successfully.
+
+1/27/2018 - Added check to see if machine already exists before adding.  Added form 
+and code to remove a machine.  Added a form to add a new volume set.
+
+1/28/2018 - Renamed set table to volumeSet to avoid conflict with C# type "Set".
+
+1/30/2018 - Added ' to column names in MySQLFramework because there were conflicts
+between column names and SQL keywords (e.g. "set").  Decided to put in checks for
+referential integrity during removes instead of just issuing a warning.  Finished
+VolumeSet add and remove, and added add Volume form.  Added page, feature and eco
+tables into entities.  Besides that, some message cleanups and other small fixes.
+
+1/30/2018 - Had to run an SVN cleanup: TortoiseSVN Cleanup..., Select copy status,
+break locks, fix time stamps, vacuum pristing copies, refresh shell overlays, 
+include externals.
+
+1/31/2018 - Added a check for volume references when removing a volume set, and tested. 
+Brought in the cardtype entity, which has a reference to volume.  Had to change the 
+type for dates from "DATE" to DateTime to keep C# happy.  Added remove volume form and
+associated menu entry.  Removed unused connection object instance from main form, and
+removed the using MySQLFrameworks statement.  Tested remove volume.
+
+2/1/2018 - Started working on form to edit features.  Settled on using DataGridView
+control.  Got machine selection and display working.
+
+2/2/2018 - Continued to work on form to edit features.  Brought in referenced tables
+(cardlocation, diagramblock).  Added a modified field to the database entity objects,
+so I can mark them as the users changes them in the DataGridView.  Learned how to handle
+deletes.  Adds were easy (when all done, those are the ones with no existing feature
+code.)   This should be much easier for other places I will use a table to edit!
+
+2/3/2018 - Tested edit features.  Liked it so much I decided to change all of the 
+removes to update/removes, and changed removeVolume to use a data grid view like 
+features (for a particular volume set).  Along the way fixed a bug in the MySQLFramework -
+it was not quoting column names during an update.  
+
+2/3/2018 - Changed form that had just been machine removal to add update capability. 
+Also added check for frame references to machine, which had been overlooked.
+
+2/3/2018 - Added Edit form for Frames and tested.  Patterned after Features, but
+more simple - only one column is involved.  Brought in frame, machinegate and (by
+accident) gatepin tables.  
+
+2/4/2018 - Added form for Machine Gates and tested.  This one had two pull down lists,
+so there was more code.  Also, decided on this one to just reset, and leave the form
+up after an apply, so another gate could be selected.
+
+2/5/2018 - Started work on panels.  Decided to integrate card slots into that, using
+pull-down lists in the datagridview.  Started but not nearly finished.  Will need to
+add checks for references to cardslot from tiedown, diagramblock and edgeconnector as
+well as cardlocation.  Also still have to solve the issue of having to click multiple
+times on the pulldowns inside the datagridview, and how to synchronize changes (perhaps
+using the index.)
+
+2/6/2018 - Worked on form for editing panels.  Had several false starts, first trying 
+to create unbound combo box columns in the data grid view, and then unbound text box 
+columns.  I could never get them to update right.  So instead I created an internal 
+type I can initialize from the database and use to update the database. Viewing is 
+pretty much in place, but I need to work on the widths and the add / remove / update 
+logic.
+
+2/7/2018 - Minimal progress on editing panels.
+
+2/8/2018 - More progress on editing panels.  Have the panel validation event working,
+all that is left are the apply button activities.
+
+2/9/2018 - More (slow) progress on editing panels.  Apply button requires lots of 
+checks and manipulations of the cardslot table, in progress.
+
+2/10/2018 - Finished editing panel form and tested.  (Whew).  Got started on ECO
+edit form a little bit.
+
+2/11/2018 - Worked on a bit more consistency in field max lengths and field editing.
+Finished ECO editing form.
+
+2/12/2018 - Started work on CardLocationPage form.  Form layout, began coding.
+
+2/13/2018 - Continued work on CardLocationPage form.  Most of the combo boxes
+working as desired, but need to do some more testing.  Then on to filling in
+data / editing / update / add.
+
+2/15/2018 - Continued work on CardLocatinPage form.
+
+2/16/2018 - Nearly done with CardLocationPage form.  Learned about that setting
+a ComboBox.SelectedItem one has to use the orignal item, not one that is the same
+(it uses Object.Equals).  Also learned that two combo boxes built from the same list
+will track each other unless you use a new BindingContext for the 2nd and any
+additional combo boxes.  Mostly working, but a few things to clean up.
+
+2/17/2018 - Cleaned up some things on the CardLocationPage form.  Added comments.
+Fixed bug where ECO combo boxes did not refresh after adding a new ECO.  Now
+we clear the page after any add, update/apply or remove as well.
+
+2/27/2018 - Spent a lot of time house cleaning in prep for some house guests.
+Finally got back to this.  Added ibmlogicfunction and cardgate tables.  Added
+form for editing IBM Logic Functions.  Also fixed missing cacnel in editing of
+ECOs.
+
+2/27/2018 - Came across a small issue.  If a user is editing the last row or 
+clicks in the add, but then doesn't do anything, those forms that have 
+cell validation become unhappy with the empty column (of what is really an
+empty row.)  This can be fixed by checking DGV.Rows[e.RowIndex].IsNewRow and
+just returning when it is indeed new.  (Fixed in ECOs, Features, Frames,
+Machine Gates and Volumes on 2/28.  Interestingly, this code was already 
+in place in Panels - I had to re-learn it, apparently).
+
+2/28/2018 - Added logicfunction table.  Deleted dead code in IBM Logic
+Function form.  Added (Standard) Logic Function Form and tested.
+
+2/28/2018 - Added missing Tool Tips to data grids for ECOs, Logic Functions,
+Panels, Card Locations, Features, Frames, IBM Logic Functions and Volumes.
+
+2/28/2018 - Added logicfamily table.
+
+3/1/2018 - Added Logic Levels Table and Form and tested.  
+Also, changed database definition to say that these voltages are in tenths 
+(rather than integer volts or using floating point in the database).  Went
+back and performed overlooked tests on referential integrity when removing
+rows from (IBM) Logic Family, IBM Logic Function and Standard Logic Function
+tables.
+
+3/1/2018 - MILESTONE.  The simpler single-table and two-table edits are done.
+The harder multi-table, complicated edits are what remains.  In looking, I 
+discovered a small issue.  The cardLocationBlock table refers to a cell in
+a diagram page as "block" - a single field, whereas the diagramBlock table
+identifies a Row(2 chars) and column (int) for the same kind of thing.  Need
+to reconcile that.
+
+3/2/2018 - Added Card note table to start working on Card Type (SMS Card) Form.
+Layed out Card Type form, including ECOs and Notes.  Increased length of Logic
+Family table name field to 16 to accommodate "CONVERTER".  Changed some names
+in the Card Type table to more accurately reflect their usage.
+
+3/3/2018 - Continued work on Card Type form.  Completed form fill-in.  Working
+on validation.
+
+3/4/2018 - Continued work on Card Type form, which is pretty complicated, in part
+because the card ECO table does not have the name of the ECO, just its database
+key, and because the user might make considerable changes to the notes, which
+are often referred to by the Card ECOs.
+
+3/5/2018 - Initial coding of Edit Card Types Form complete, initial testing started.
+Ran into a BIG problem with ECOs, where I display and update data that is not
+actually in the original list (text version of ECO key and note key).  Have a 
+solution of using a subclass that has the added data, but still have to work
+out the details.
+
+3/6/2018 - After a lot of work, managed to get ECOs to display correctly using a
+subclass.  Also used auto width so that the data grid view columns fill out the
+control - will maybe go back and fix that in the other data grid views as well.
+Tested.  One idiosyncrasy exists:  if the user renames a note (not the note text,
+but its named identifier) and does not ALSO change the note name column in the
+ECOs, then the old note does get renamed, but the update will then auto-add an
+entry with the old note name.  I decided this was better than trying to update
+the ECO list "magically".
+
+3/6/2018 - Updated gatePin table to specify voltage in tenths, and edited comments
+to better explain pin vs. inputGate/outputGate.  Started work on Card Gates 
+editing form.  Using unbound data grid view for this one - it consists of a
+check box (for delete), text boxes and drop down combo boxes.  Initially, so far,
+so good.
+
+3/7/2018 - Working on Card Gates editing form.  Struggling with combo boxes in datagrid -
+getting the value is complicated and esoteric.  Need to decide if I want to change the
+approach.
+
+3/8/2018 - Changed things up to use data sources for the combo boxes that represent
+child tables.  Coding completed, but only partly tested.  Re-generated cardgate table
+entity - it was old, and still had a "bool" data type inside.  After some work, most
+things are working, but deleting a row does not work right - but I have found a 
+solution online to this.  With some tweaking to enable checking the delete, all
+appears good.  More testing tomorrow, and after the Pins table editing is in place.
+
+3/9/2018 - Reordered the fields in the gatePin table so they are in better order for
+the related form.  Completed and did initial testing of form to edit pins through the
+point where it displays in the data grid view.
+
+3/10/2018 - Changed SQLToEntity translator to make a few int columns translate to C# type int?,
+because they needed to be nullable.  Affected tables cardgate and gatepin.  
+Changed EditCardGatesForm to check that the defining pin is not left empty.
+
+3/10/2018 - Brought in cardLocationBottomNote table.  Started work on EditCardLocations
+Form - layout complete.
+
+3/11/2018 - A lot of work on the EditCardLocationForm.  Selection seems to be working,
+and the dialog is populating except for the datagridview for the identified entries
+(Sheet+coordinates).
+
+3/12/2018 - Added DiagramPage table - used by CardLocationBlock.  Gave up on combo
+boxes for row and column because I kept getting DataError events and it wasn't 
+clear how to fix that - so now they are just text box columns.  I also used text
+box columns for ECO and Diagram Page because the pick lists would possibly have
+gotten way too long.  Dialog population and editing are done-ish.
+
+3/13/2018 - Working on EditCardLocationBlockForm Apply and Delete buttons.  
+The pre-update messaging / prep is coded and appears to be working.  Added the
+code to do the actual updates as well, but theya re not yet tested.
+
+3/14/2018 - regenerated cardlocation entity object - it had a "bool" from before I
+recognized that causes problems - data base is "TINYINT".  Just had to regen the
+entity object and fix the code for the check box.  Completed basic testing.
+Changed datagrid to display sheet references by Col/Row, as that is how they are
+displayed in the IBM card location charts (e.g. "4A").  Unfortunately, sorting by
+page name, which would be desirable, would be really hard.    Maybe someday, but
+today is not that day.
+
+3/15/2018 - Removed leftover debugging code.  Removed redundant Add Volume Form
+dialog - the Edit Volumes dialog handles adds as well.
+
+3/15/2018 - Completed feature import, including a helper class that deals with
+the file open/close/read and CSV parsing.
+
+3/16/2018 - Working in Card Type / Gates / Pins importer.
+
+3/17/2018 - Finished coding of Card Type / Gates / Pins importer.  This one is
+smarter, in that it won't overwrite existing entries.  Created a utility logging
+class in the base class Importer as well.  Eventually (maybe soon) that should
+write to a file, and then provide a dialog for viewing the log.
+
+3/17/2018 - Added a log display dialog for viewing import logs.
+
+3/18/2018 - Increased Card Type name column to 80 characters, and changed
+the EditCardTypesForm accordingly.  Removed some old comments/dead code
+from EditCardGatesForm.   Added Transaction Begin/Commit to DbSetup object,
+which TREMENDOUSLY improved import performance.  Tested and debugged
+EditCardTypes import.  Fixed incorrect comment in getWhere in 
+tables.cs (MySQLFramework).
+
+3/18/2018 - Fixed EditCardTypesForm to use card type instead of name
+in drop down list (bug fix).  Changed EditCardTypesForm, 
+EditCardGatesForm and EditCardGatePinsForm to use a fixed font to
+select the card type.
+
+3/19/2018 - Added import startup dialog to capture Skip/Merge/Overwrite
+when duplicates are encounted, and to capture the file name, that can
+be shared by all the imports.
+
+3/20/2018 - Worked on Feature import to include th new common dialogs
+created after it was first developed.
+
+3/21/2018 - Completed and tested updated feature import.  Fixed a
+problem where deleting a card type in EditCardTypesForm did not delete
+pins.
+
+3/22/2018 - Changed EditCardTypesForm to add a separate combo box to 
+select the volume to move the card to, and changes to how the original
+combo box behaves as well, so that once a card is moved to another
+volume, it stays set to the original volume.  Changed CardTypes import
+to set the machineSerial to blank on any volume sets / volumes that
+are created in the process.
+
+3/22/2018 - Changed Importer base class to include an (optional) machine
+serial number in the Volume lookup.  Added ECO lookup to Importer base
+class.  Adjusted relevant Form to add the new paramter to Volume lookup.
+Removed a TODO from a Form involving data grid view column width adjustment
+that won't be happening.  Changed max column length for page table, and
+adjusted EditCardLocationPage form to match.  Added TODO to 
+EditCardLocation form to fix issue of it inserting rows with no volume
+key.  If nothing else, it should "make one up" to make later editing
+possible.  Added new Card Location Page importer, and added to menu.
+
+3/22/2018 - Started work on Import for CardLocationCharts.
+
+3/23/2018 - Added transaction cancel to Dbsetup - but not using it at
+this point.  Added some more lookup/create methods to Importer base class.
+Continued work on Card Location Charts import.
+
+3/24/2018 - Added a test mode check box for import testing.  Finished
+initial coding of Card Location Charts import.  
+
+3/24/2018 - Increased length of note field in Card Location Bottom Notes 
+table to 8.   Fixed bug in Importer base clase getCardType() - was not 
+setting the type.   Well along in debugging Card Location Chart import, 
+but still need to fix issue where part numbers do not consistenly have 
+leading 0's in the input, and so do not match up - may need to use "LIKE"
+or some such.
+
+3/24/2018 - Added method in importer to pad part numbers out to 7 digits
+with leading zeros (if they are numeric).  Also updated edit forms to
+store the 7 digits.   Completed initial testing of Card Location Chart importer.
+
+3/25/2018 - Debugging for Card Location Chart Importer done.  Importing
+sheets.
+
+3/27/2018 - Changed Edit Panels to use transactions (adding card slots
+was taking quite a while).  Fixed bug in Edit Panels where changing the
+Gate didn't populate datagridview.
+
+3/27/2018 - Realized I was mislabing Frames as Gates in the spread sheets.
+Deleted database rows imported, and fixed spreadsheets.  Working on
+Tie Down import.  Removed extra colum check for a column named "" in
+Card Location Page import.  Fixed comment related to headerin processing
+in Feature Import.
+
+3/28/2018 - Finished work on Tie Down Import.  Started work on EditTieDownsForm.
+
+3/29/2018 - Continued work on EditTieDownsForm. 
+
+3/31/2018 - Finished work on EditTieDownsForm.
+
+4/1/2018 - Added firstPage and lastPage columns to volume table, so that import
+and Edit functions can try to put sheets in the correct place.  Updated 
+EditVolumeForm to handle the new columns.
+
+4/2/2018 - Updated ImportCardLocationChart, ImportCardLocationPages, ImportTieDowns,
+and EditCardLocation to use new columns in volume table.  Deleted old data and
+re-imported Frame C Gate C Panel 1 to test.  Also changed EditCardLocationPageForm
+to allow changes to fields (via combo boxes, typically) for a page without reloading 
+the page.  This way those fields can be changed, though it can get a little confusing
+to use.  May have to consider closing the dialog after each update to avoid confusion.
+fields
+
+4/3/2018 - Changed EditCardLocationPageForm to screen out diagram pages, lest 
+it turn what was a diagram page into a twin diagram/card location page.  Added
+the final tables into the setup: SheetEdgeInformation, DotFunction and
+Connection.
+
+4/3/2018 - Working on EditDiagramPage form.  Basic form is working except for
+deletes (it does screen out Card Location Pages -- see above), and ECO Tag
+maintenance is also coded and tested.  Added some ECO helpers to the Helper
+class.
+
+4/4/2018 - Added an order column to volume, to be used when displaying / editing /
+using volume names in combo boxes.  (4/3) added leftSide and rightSide to 
+sheetEdgeInformation table.  Updated several forms which have a volume pull-down,
+including the ones dealing with SMS cards, gates and pins.
+
+4/4/2018 - row field in sheetEdgeInformation table was char(2), which caused it
+to generate as a "char" type.  Changed to VARCHAR(2).  Added sheet edge data
+grid view to EditDiagramPageForm.  Changed TinyInt fields for leftSide and
+rightSide in sheetEdgeInformation to by Tiny Int(4) to match up with the
+INT data fields in the C# entity.  (Had already done that with checkMark
+field in tiedown table, but have not (yet) done that in gatePin table.)
+Tested Sheet Edge Information data grid view in EditDiagramPageForm.
+Moved validDiagramRows static array from Importer.cs to Helpers.cs.
+
+4/5/2018 - Factored out validPins, as I will also need it for the EditEdgeConnectorsForm.
+Changed the Helpers Card Slot Info to return/use a new class, instead of a list of
+strings / individual strings.  Changed EditTieDownsForm accordingly.
+
+4/5/2018 - Started working on EditEdgeConnectorsForm.  Turns out that a datagridview
+doesn't really handle an array, so I split it out into 8 separate fields, and
+wrote a getter and setter to transfer between the class I use for the data grid
+view, and an array.
+
+4/6/2018 - Continued working on EditEdgeConnectorsForm.  Also changed the
+EditDiagramPageForm to follow the recent pattern of having a doUpdates method
+that is called twice, first just to get a message of what will be updated for
+confirmation, and then again to apply the actual updates.
+
+4/6/2018 - Continued working on EdgeConnectorsForm.  Finished initial coding,
+but have not yet tested.  Factored the valid rows and valid pins into Helpers class, 
+and changed EditPanelsForm, EditTieDownsForm and ImportCardLocationChart to match.
+
+4/7/2018 - Finished testing EdgeConnectorsForm.  Rather than try and match up
+reference numbers (which would have required a column containing the old reference
+number to see if it changed), we now just delete all the old ones, and add them back
+(changed or not).  
+
+4/8/2018 - Started experimenting with Diagram Block Layout.
+
+4/9/2018 - Working on EditDiagramBlocksForm.  Grid of buttons displays, and logic
+blocks display the right information.
+
+4/11/2018 - Added code to display dot functions.  Changed dotFunction table
+logicFunction field from char(1) to varchar(1) (string instead of char).
+Added form for editing dot functions.  Similar change to Connection table.
+Also, key of connection table had been erroneously defined as VarChar(45)
+instead of INT.  Fixed.  Tested EditDotFunctionForm.
+
+4/11/2018 - Removed Apply button from EditDiagramBlocksForm, and 
+renamed Cancel to Close.  There is no actual editing on this page - it 
+is just a navigation/display page.  Started work on EditDiagramLogicBlockForm.
+
+4/11/2018 - Factored out "Magic Number" 5 (number of diagram columns) into Helpers.
+Continued work on EditDiagramLogicBlockForm.
+
+4/12/2018 - Continued work on EditDiagramLogicBlockForm.  Panel displays OK for
+empty slots, slots with current logic blocks, and slots with just a card location
+chart entry.  Logic block display in text box coded and basically tested.
+
+4/16/2018 - Continued work on EditDiagramBlockForm.  Now keeps state information
+solely in the UI, and draws the diagram from that information.  Fixed bug in
+EditDiagramBlocksForm to properly display ECO Tag.
+
+4/17/2018 - Finished EditDiagramBlockForm and tested.
+
+4/18/2018 - Started work on EditConnectionsForm.
+
+4/20/2018 - Changed EditDiagramLogicBlockForm to recognize when nothing changed.  (It
+cheats a little - when using the Edit Connections button, it does not care if the
+direction of an extension changed (the regular apply button still always applies
+updates, even when it does not need to).
+
+4/21/2018 - Continued work on EditConnectionsForm and started work on EditConnectionForm.
+(They will be easier to develop in tandem, to a degree.)
+
+4/23/2018 - Finished coding on EditConnectionForm.  Not tested yet, and have not yet
+pointed EditConnectionsForm methods to this new form.
+
+4/24/2018 - Added code to invoke EditConnectionForm to EditConnectionsForm.  Also 
+changed EditConnectionForm parameter from a connection to just the key.  Fixed an
+issue in importers where log file was not closed if import errors occured. 
+Increased length of bottom notes from 8 to 10 ("OVER HANG").
+
+4/24/2018 - Changed Importer log display form to anchor Close button to bottom.
+Started debugging EditConnectionsForm and EditConnectionForm.
+
+4/25/2018 - Debugging EditConnectionsForm and EditConnectionForm
+
+4/26/2018 - Fixed problem with EditEdgeConnectors where confirmation message
+was so long, one could not see the button - changed to use the 
+ImporterLogDisplayForm instead of a message box.  Fixed EditDiagramBlockForm
+and EditDiagramBlockForm to use the machine name from the card slot identified
+by the logic block instead of the machine name assocaited with the diagram
+page for the logic block button text, the combo boxes dependent on the
+machine and in the drawing display.  Fixed SQL syntax error for outputs in
+EditConnectionForm.
+
+4/27/2018 - EditConnectionForm Fixed bug - when selecting a connection to a gate, 
+after selecting the gate entry, the application crashed.  PIVOT:  Changed the
+handling of logic block pins from Gate level to Card level (the latter by
+getting all of the pins in the card).  This is more consistent with capturing
+the info on the drawings faithfully.  Continuing to debug connection editing.
+Helpers: Added method to get all of the input or output pins of a card.
+
+4/27/2018 - EditConnectionForm Fixed problems with Edge Connector reference handling
+EditConnectionForm:  toEdgeConenctorReference is now also used in the rare case 
+where a gate-gate connection has an Edge Connector reference (e.g., to 1415 lamps)
+EditConnecitonsForm:  Add * in front of non-empty Edge Connector References, and 
+also display them for gate-gate connections.
+
+4/28/2018 - EditDiagramPageForm - added in missing New Page button functionality.
+Tested Dot Functions.
+
+4/29/2018 - EditConnectionForm - added another combo box where user can select a 
+load pin (identified as +IBM Logic Function "L") (both show in ALD logic block)
+(Note:  decided NOT to exclude load pins from the regular output list, though
+we may do so later.)
+
+4/29/2018 - EditDiagramLogicBlockForm - Close form after apply, removed dead
+variables, pre-select logic levels based on first gate of card, force
+symbol and title to upper case.  Fixed tabbing order.
+
+4/30/2018 - EditConnectionForm - Changed dialog to display an Open Collector
+label for the selected output pin.  Adjusted tab order.  
+EditConnectionsForm - Display row next to signal name in table, and changed
+background color to emphasize that dgv is read only.  
+
+4/30/2018 - EditConnectionsForm - added inputOutput string to class
+ConnectionInfo.  EditDotFunctionForm - added read only data grid view of connections.
+
+4/30/2018 - Shortened machine to varchar(8), added description as varchar 255. 
+Started work on EditMachinesForm, using a datagridview approach, to replace
+EditMachineForm.
+
+5/2/2018 - IBM1410SMSForm - changed to use EditMachinesForm.  EditMachinesForm: Debugged.
+EditMachineForm: Removed.
+
+5/3/2018 - IBM1410SMSForm - Removed Add menu and its (add) machine and (add) volume set
+entries.  Changed EditVolumeSet to EditVolumeSets.  Removed Select menu.  
+Added and debugged EditVolumeSetsForm.
+Removed AddMachineForm and AddVolumeSetForm.
+
+5/3/2018 - Removed ` from SQL queries, as they represent an unintended MySQL
+dependency:
+
+EditVolumeSetForm:         REMOVED (no longer userd)
+
+Helpers:                   volume.set (in getOrAddDiagramPageKey)
+EditCardGatePinsForm:      volume.set volume.order
+EditCardGatesForm:         volume.set volume.order
+EditCardLocationForm:      volume.set volume.order
+EditCardLocationpageForm:  volume.set volume.order
+EditCardTypesForm:         volume.set volume.order cardlocation.type
+EditCardTypesForm:         removed ` from (machine) name
+EditCardTypesForm:         Fixed a bug in editing ECO dates
+EditConnectionForm:        edgeconnector.order
+EditConnectionsForm:       connection.from/to  connection.fromPin/toPin
+EditDiagramBlocksForm:     cardlocationblock.ignore
+EditDiagramLogicBlockForm: cardgate.number
+EditDiagrampageForm:       volume.set volume.order
+EditEdgeConnectorsForm:    edgeconnector.order (2 instances)
+EditTieDownsForm:          volume.set
+EditVolumeForm:            volume.set volume.order
+ImportCardLocationChart:   volume.set
+ImportCardTypes:           cardtype.type, cardgate.number
+Importer:                  volume.set
+ImportTieDowns:            volume.set (2 instances)
+
+5/3/2018:  Decided against: Display database ID in TITLE area of forms associated with single entities.
+
+5/3/2018:  Fixed spread sheet for gate DFS, defining pin Q:  D is an output (not an input)
+
+5/3/2018:  For now, I decided against messing with machine suffix/prefix code.  For future
+reference, this kind of thing appears in EditDiagramBlocksForm (prefix),
+EditDiagramLogicBlock(prefix,suffix), EditDotFunction(prefix), 
+EditEdgeConnectors(prefix,suffix) and ImportTieDowns (suffix).
+In a lot of cases, these are just for display purposes.
+
+5/3/2018 - Fixed references to card type ABM => ABN, deleted card type ABM.
+Reconciled two card types DFC.  Part # in SMS card spreadsheet was wrong.
+EditCardTypesForm - Fixed issue with not handling a null logic family.
+
+5/9/2018 - Having abandoned the "defining pin" concept (because some gates
+have no unique pin), I instead added a new cardGate column to the
+diagramBlock table, and a pull down for it in EditDiagramLogicBlockForm.
+Also now check for references to cardGate from the diagramBlock table in
+EditCardGatesForm when deleting gates.
+
+5/9/2018 - Changed ImportCardTypes to handle oscillator frequency.
+
+5/9/2018 - Reimported gates with Merge to pick up DPQ, YLD, YLB, YLE, 
+YLH, YLJ, YLF and YLG.
+
+5/9/2018 - Discovered / remembered that Load pins MUST be defined as OUTPUTS.
+Fixed YLF and tested.
+
+5/10/2018 - EditConnectionForm: Changed to make polarity an output property.
+EditConnectionForm:  Put in check that required combo box selections made,
+depending upon selected connection type.
+EditConnectionForm:  Disabled/enabled controls based on selected connection type.
+EditConnectionsForm:  Changed to display polarity on all outputs.
+EditDiagramLogicBlock:  Include new cardGate combo box in test for modified.
+EditDiagramLogicBlock:  Include dashes for output in drawing, depending upon polarity.
+
+5/13/2018:  EditDiagramBlocksForm: Added G#:In/Out to ALD diagram buttons
+EditECOsForm:  Sort ECOs.
+
+5/13/2018:  Database cleanup.  Deleted following database IDs:
+Page 170593 (88.87.86.1), Diagram Page 170594
+Page 170589 (88.87.86.85), Diagram Page 170590
+Page 999201
+Card Location Page 999200
+Volume 170615
+DiagramBlock 999300, 999301, 999302
+Panel 999101, Slot 999901, Frame 170612, Panel 170613, Slot 170614 and 170620, Frame 170613(?)
+Card Location 999200, 100908
+Feature 999001, 999002, 170618
+TieDown 170621
+Set Machine for ECO 185966 ('111803') to 0 (it is an SMS ECO)
+
+5/14/2018: EditDiagramPageForm:  Force title to upper case on update.  Added Comment field.  
+Made "Remove" button not visible.
+EditCardLocationPageForm:  Force title to upper case on update.
+
+5/14/2018: Database/SpreadSheet:  Fixed various Load "Gates":
+DEB (Clamp): Changed all the existing pins to output, J to input (0V)
+TFK Added Q as an input (it is a voltage input, show in the ALD)
+DGK 2nd gate, Q Input, A Output.  Pins G, F, B, D and C outputs.
+   (But there was no way to associate a delay value with each pin)
+DAC Gate 4 L output
+DPQ Gate 7 M Output
+DPB Gate 3 B Output, Gate 4 C Output
+DPV Gate 6 Q output, Gate 7 P Output
+YLD Gate 7, YLB Gate 5, YLE Gate 7, YLH gate 4, YLJ Gate 4, YLF Gate 4, YLG Gate 4 - Outputs
+
+5/14/2018 - EditDotFunctionForm: fixed issue where a new DOT function was displaying
+connections (likely from things that were NOT DOT functions).
+EditDiagramLogicBlockForm: Redraw logic block drawing on return from EditConnectionsForm.
+
+5/17/2018 - Database:  Added (standard) logic functions ONE and ZERO.
+
+5/17/2018 - Still need to work on load gates.  In a way, the load is an input (for a
+connection), and it is useful to be able to do that when a load is showing on a
+connection destined for a sheet edge, but it shows as an output from the logic block
+on a diagram, and is searched for as an output when looking for load pins on a logic 
+block.  It may make sense to simply mark them as BOTH input and output.  
+[Which is what I ended up doing.]
+
+5/19/2018: EditCardGatesForm:  Allow transistor number of 0 in datagrid.
+EditConnectionForm:  Handle keypress for shortcuts for +, -, Pin, Gate, Edge
+EditConnecitonForm:  When no existing connection, set open collector label
+  visibility based on first combo box pin.
+EditConnectionForm:  Fixed spelling of Destination in label, added missing tooltips.
+EditConnectionsForm:  Added "*Ref -or- " to Row / Signal Name output column header.
+EditDiagramPageForm:  Fold diagram ECO tags (name) to upper case on update.
+EditDiagramBlocksForm:  Added additional DOT function button for column 1 - it
+ turns out that sometimes a DOT function is to the right of the rightmost gate,
+ connecting to a sheet edge signal.
+ EditDotFunctionForm:  Added the ability to edit connections from the DOT 
+  function to a sheet edge (yeah, sometimes they are like that).
+EditDotFunctionEdgeConnectionForm: New: For editing a connection from a DOT function
+  to a sheet edge.
+
+5/19/2018: EditDiagramLogicBlockForm: Preselect Feature in feature combo box from card location when first 
+editing a logic block.
+EditConnectionForm:  If editing a sheet edge input, pre-fill in the page name from
+the selected signal name.
+EditConnectionsForm:  Change name of button column to EditButton - needed because
+a column named "edit" was added to the ConnectionInfo class.
+
+5/20/2018: EditDiagramLogicBlockForm: Fixed bug introduced by feature preselect 
+causing issues for new logic blocks that were not in the card location chart.
+EditConnectionForm: Set e.handled in keypress handler to avoid those characters
+from getting used in the controls (+, -, G, D, E).
+
+5/21/2018: Changed resistor pins on DFJ to In/Out.
+
+5/22/2018: EditConnectionForm:  Assume positive polarity on new input connections
+from another gate.
+
+5/29/2018: EditConnectionForm:  Tab order +/- at the very end.
+EditConnectionForm: When selected row/signal changes, if isInput and not 1 source, clear
+sheet text box.
+EditConnectionForm: When pin changes, set open collector visible only if !isInput.
+EditConnectionsForm:  Set DataGridView tabstops to false;  Initial Focus on AddInput button
+EditDotFunctionForm:  Anchor DataGridView to bottom left.
+EditDiagramLogicBlockForm:  No tabstop on Output On Left checkbox.
+EditDiagramLogicBlockForm:  Set Block Configuration tab stop right after ECO tag tab stop.
+
+5/30/2018:
+EditConnectionsForm:  Changed method call from Focus() to Select() to focus on AddInput button.
+EditDiagramLogicBlockForm:  Increased length of diagramblocktitletextbox from 8 to 10
+(Database, at 20, was unaffected.)
+EditDotFUnctionForm:  ALSO anchor Datagrid view to top and right.
+
+5/31/2018:  Added Card ZKV, referenced from 11.40.01.1.  
+Modified Capacitor card AET:  Capacitors need to be inputs as well as outputs.
+Modified card DEQ:  For gate with output on pin A, H is also an Input
+Modified card DAX:  Load pin has to be I/O, because one page uses it as an input.
+
+6/2/2018:
+Database:  Table Connection, add column fromEdgeConnectorReference (these are showing up on the
+input side, not just the output side).
+EditConnectionsForm:  Removed tab stop on card type, display fromEdgeConnectorReference, handle
+"--" intra-card connections.
+EditConnectionForm:  Handle input side edge connector references.  Handle "--" intra-card
+connections.
+Helpers:+getGatePins()  Add pin "--" to represent intra card connections.
+
+6/3/2018:  Card type DEA, changed all gates output levels from S to blank.
+Card type DFA, set Pin to intra gate input from to gate 8 as pin F.
+
+6/4/2018:  Card TYPE DFA, set pin to intra gate input to gate 4 as pin P.
+CAN'T set intra gate input to gate 2 as pin P (2-3 connection has no pin, editor complains)
+
+6/5/2018:  EditConnectionForm: Removed tab stops completely for +/-
+EditConnectionsForm:  Anchored output datagridview to bottom.  Set both
+datagridviews to autosize AllCells so signal name would not get cut off.
+
+6/7/2018:  BUG: EditDiagramPageForm failed on add with null sheetEdgeInformationList.
+Fixed  (and also fixed potential for ECOs to do the same thing.).   Changed sheet
+edge information data grid view to AutoSizeColumnsMode = All Cells and widened the
+page -- too many signal names were getting cut off.
+EditDotFunctionEdgeConnectionForm:  Changed to allow inputs to DOT functions from
+sheet edge signals.
+EditDotFunctionForm:  Renamed addOutputButton to addInputOutputButton.
+Changed connections data grid to use autosize columns mode = all cells and made dialog
+a little bigger so signal names are not cut off as often.
+Added edge reference for edge inputs to DOT functions.
+Enabled Edit button functionality on sheet edge inputs to DOT functions.
+
+6/7/2018:  Changed ImportersLogDisplayForm (used by EditEdgeConnectorsForm) to
+have focus on the OK button when used.  
+
+6/7/2018:  Fixed EditDotFunctionEdgeConnectionForm to pre-populate the
+sheetTextBox if it is an input and the signal name matches exactly one
+output sheet.  EditDiagramLogicBlockForm: If the apply/edit connections button is
+clicked, only proceed if the apply portion was successful.
+
+6/8/2018: Card type DAC, pin L is I/O - fixed in database and spreadsheet.
+
+6/8/2018: Added EditSheetEdgeOutputConnectionsForm to allow pre-popoulation/easy
+entry of multiple output (right side) sheet edge references from gates (but
+not DOT functions...).
+EditConnectionForm:  Changed to add Populate button and invocation of the
+EditSheetEdgeOutputConnectionsForm.
+
+6/8/2018:  Fixed an issue with +S OP MOD REG 8 BIT - it had erroniously been
+entered for page 13.12.01.1 when entering page 12.12.40.1, noticed the error
+when that same signal showed up on 12.12.50.1.
+
+6/9/2018: EditDiagramPageForm:  Fixed "Edgie" typo in message.
+EditConnectionForm:  Select combo box next to radio button when selected.
+Preselect Pin combo box initially.
+EditDiagramLogicBlock:  Select first "real" ECOtag, unless there are none.
+
+6/9/2018: Something went wrong during card location chart import between 11D2 and
+11D3.  Starting with page 12.12.60.1, I am seeing cards that should be 11D3 showing
+up as 11D2 - and that is consistent with the (wrong) information in the database.
+(Turned out that on the spreadsheet, I had 11.04.07.0 in the sheet column, that
+should have been 11.04.08.0.  The part number was also wrong.)
+
+Fixing will require:
+
+   1.  Foreach bad page (11.04.07.0, 11.04.08.0)
+           for all  cardLocation rows referring to that page
+		          delete cardLocationBottomNotes referring to that cardLocation
+				  delete cardLocationBlock rows referring to that location
+			      delete the cardLocation
+		   
+
+   2.  Finding the bug that caused this in the first place
+   3.  Re-import the card location chart page
+
+6/9/2018:  Added "Force Purge" to EditCardLocationPageForm to do step 1.
+Importer:  Fixed a bug where getVolumeKeyByName was not including the
+machineSerial in the insert, causing lots of duplicate volumes (and
+their associated pages).
+
+6/9/2018:  EditSheetEdgeOutputConnections - Fix null pointer issues when adding a
+new connection that has no *Ref
+
+6/10/2018: EditConnectionForm:  Remove the initial differentiation between input
+and output for gateRefComboBox.
+EditDiagramLogicBlockForm:  Tab order:  Gate follows block configuration.
+
+6/10/2018:  Database:  Added column toEdge2ndConnectorReference Varchar(4) to
+connection table.
+EditSheetEdgeOutputConnectionsForm:  Add column to datagridview for 2nd connector 
+ reference, and handle accordingly.  This allows adding entries.  Also, set error
+ text in data grid view for errors.
+EditDotFunctionForm:  Add code to display toEdge2ndConnectorReference when present.
+EditConnectionsForm:  Add code to display toEdge2ndConnectorReference when present.
+EditDotFunctionEdgeConnectionForm:  Add code to initialize toEdge2ndConnectorReference,
+  however, it does not allow adding/changing one at present - not expecting to see that.
+EditConnectionForm:  
+   Add 2nd combo box for 2nd edge reference, and associated label.
+   Add clone of first list (they cannot change in sync) for data source.
+   Add clone of first list for gate combo box, which also should really not change in sync.
+   Removed spurious if around reference combo box init - there will always at least be
+      an empty "default" entry.
+   Disabled Edge reference labels/combo boxes when connection is not from/to and Edge.
+   Initialized 2nd edge reference to blank when not from/to an Edge.
+
+6/10/2018:  EditEdgeConnectorsForm:  Added two more columns.
+
+6/10/2018: EditConnectionForm:  Existing connections can have null (rather than an empty
+string) for toEdge2ndConnectorReference, so if that happens, initialize it to an empty
+string in the code.   
+Changed edge connections from 11.10.02.1:1D to use C / +S 2ND CLOCK PULSE 2 and deleted
+D / +S 2ND CLOCK PULSE 2
+
+6/11/2018:  Volume II data entry complete:
+   865 Diagram Blocks
+  1986 Sheet Edge Signal rows
+   480 Distrince sheet edge signals
+  2868 Connections
+
+6/13/2018:  Continued work on HDL generation.
+
+6/14/2018:  Continued work on HDL generation.
+EditSheetEdgeOutputConnectionsForm: Forced references to upper case, and make sure it did
+not store a null for a blank/empty reference in either to-edge connection column.
+
+6/19/2018:  Continued work on HDL generation.  Testing/debugging header generation and
+gate/connection validation.
+
+6/20/2018:  Added Parms class to "persist" user interface data.
+GenerateHDLForm:  Now uses Parms class for machine, volume set, volume and output directory.
+EditDiagramPageForm:  Now uses Parms class for machine and volume set.  Issues with bad index
+when I try to use volume, and it messes up the ECO data grid for unknown reasons if I try to
+use page.
+
+6/20/2018:  GemerateHDL: Fixed BUG:  Did not properly show pin in message about a pin going to a DOT
+function along with something else.
+
+6/20/2018:  EditConnectionForm:  Removed Console.Writeline()
+GenerateHDL:  Rewrote latch detection to detect two levels deep and tested. 
+(It will be interesting to see if there are cases deeper than that)
+
+6/20/2018: EditDiagramLogicBlockForm:  Fixed issue in text display when input level is
+2 characters (or longer) long.
+
+6/21/2018: EditConnectionForm:  Issue warning if multiple different output pins.
+GenerateHDL:  Issue warning if multiple different output pins.
+
+6/21/2018: EditConnectionForm.  Fixed but in multiple output pins - it should only
+check on outputs.  ;)  Also, added check on inputs if pin is not "--" - the same pin
+should not occur more than once.
+
+6/21/2018:  EditDiagramPageForm:  Now displays connection count for each sheet edge signal.
+EditDiagramLogicBlockForm:  Fixed bug where if machine, frame, gate or panel changed, the
+Apply + Edit Connections button would not apply updaates.
+GenerateHDL:  Created shared method to generate output pin names (used both during
+signal declaration, and in logic statements)  NOT YET TESTED.
+
+6/22/2018:  EditDiagramPageForm:  Refesh dialog to get updated sheet edge signal 
+counts after returning from editing logic blocks.
+GenerateHDL:  Fix silly typo.
+
+6/22/2018:  Tested earlier changes to GenerateHDL.
+EditConnectionForm:  Fixed issue of to/from Edge Connection not clearing out the
+to/from DiagramBlock/Pin/Polarity/DotFunction, so if a connection was changed, the old 
+data made it show up in the old place.
+
+6/22/2018:  GenerateHDL:  Started working on actual logic generation.
+Discovered a 3 gate latch loop in 11.10.06.1:  
+  4IE => 3IA => 3IF => 3HB => 3HH => 4IA,
+  so worked on a full circular logic check algorithm.
+
+6/23/2018:  Helpers.getOrAddECOKey:  Force letters in an ECO to upper case.
+GenerateHDL:  Rewrote combinatorial loop detection - generalized - and tested.
+
+6/24/2018:  GenerateHDL:  Fixed issue with intra-gate (--) pins.
+Added generation of output signal assignments.
+
+6/25/2018:  EditCardGatePinsForm:  Changed to allow no pin specification so long
+as it is a connection to another gate.  Also, fixed bug where error text always
+showed up on the first row.
+
+6/25/2018:  GenerateHDLForm:  Issue a message if no pages were matched/generated.
+GenerateHDL:  Output VHDL statements for D Flip Flip after latched outputs.
+Also, add additional comment to VHDL prefix, and genrate VHDL suffix.
+
+6/25/2018:  Documentation:  Added documentation on logic editing
+
+6/26/2018:  Helpers: added method to obtain machine name given a page.
+GenerateHDL:  Added actual statement generation for simple logic functions, and
+fixed some generated syntax bugs.
+
+6/27/2018:  EditEdgeConnectorsForm:  Set max input length of cells to 8.
+EditDiagramPageForm:  Warn if a signal appears on RHS of more than one sheet.
+GenerateHDL:  Treat SS like T.  Also, in the latch algorithm, never put a "T" or
+"SS" on the to process list.
+GenerateHDLLogic:  New abstract class to factor out common method names so that
+I can change/keep GenerateHDL HDL language independent.
+GenerateHDLLogicVHDL: New subclass of GenerateHDLLogic for generating HDL.
+(Have not yet pulled the code out of GenerateHDL to use these new classes)
+
+6/30/2018:  Inconsistent Handling of card type AEK on my part.
+Target:  I think I want to add the extra input and use a special equation.
+Page 11.10.32.1:  Added a wired OR (to fix)  (DONE)
+
+7/1/2018: EditEdgeConnectorsForm:  Anchored buttons to the bottom of the form.
+EditSheetOutputEdgeConnectorsForm: Anchored buttons to the bottom fo the form.
+EditConnectionForm:  Enable popoulate button regardless of how many references
+there are, so long as there are no existing sheet edge connections from the gate.
+EditDiagramPageForm:  Fix coding error in SQL statement.
+
+7/1/2018: Changed GenerateHDL to use the new GenerateHDLLogicVHDL subclass.
+GenerateHDLLogicVHDL:  Added signal delcaration for intermediate output for latches,
+and added library declarations for what Xilinx suggests using instead of
+library "work", called "xil_defaultlib".
+
+7/1/2018:  Had two pages 00.00.00.0, one for the 1411, one for the 1415, and
+it was causing annoying warnings.  Renamed the console one to 00.00.00.0CC ,
+and also added (CC) to its signal names that were not already prefaced with
+"CONS".
+
+7/2/2018:  EditDiagramLogicBlockForm:  Take machine to pass down to EditConnections
+from the diagram rather than the logic block.
+Database:  Added mapPin column to table gatePin.  This column specifies the name
+to use when instantiating a gate with a logic function of "Special".
+
+7/2/2018:  Database:  Added HDLname to cardGate, to use when instantiating a gate
+with a logic function of "Special".
+ImportCardTypes:  Set cardGate.HDLname to "" when importing.  Also set mapPin to ""
+when importing.
+EditCardGatesForm:  Add support for new HDLname column.
+Helpers:  Initialize mapPin for "--" gates.
+EditCardGatePinsForm:  Add support for new mapPin column.
+
+7/2/2018:  Analyzed AEK circuit with LTSpice.  If IN1 = {D, F, P} and IN2 {E, G, B} and
+OOUT = {C, A, H} then OUT = NOT(IN1) OR IN2 .  (Input E is for a dot function
+with another O/C gate coming in).
+
+7/3/2018:  GenerateHDLLogicVHDL:  Added code to generate entity generation for
+logic gates with logic function "Special".
+GenerateHDLLogic:  Added code to generate entity generation for logic gates with 
+logic function "Special".
+GenerateHDL:  Added code to generate entity generation for logic gates with 
+logic function "Special".
+Ignore connections from pin M to the same gate.
+
+7/4/2018:  GenerateHDL:  Forced needsClock to true, so that the clock is always
+in the port map.  (If this turns into an issue, the alternative will likely be
+to add a needsClock column to the diagramPage table, and set it during
+generation, but also allow it to be set/cleared in EditDiagramPageForm).
+
+7/5/2017:  GenerateHDL, GenerateHDLLogic, GenerateHDLogicVHDL:
+Fixed issue where an unpinned output generated two different output names,
+but only the first was assigned (name changed to say OUT_xx_NoPin instead of
+the destination coordinate).
+Added code to handle multiple output pins for special and trigger gates, which can happen,
+for example, when a trigger and its extension are merged.
+Initialized pins list in GenerateHDL for new blocks to an empty list, instead of null.
+Treat Logic function "Trigger" the same as "Special".
+Merge mapped pins that on an extension that are not already present in master onto the master.
+EditCardGatePinsForm:  Set maximum text length on mapName column
+t=o eight, to match check during generation.
+
+7/6/2018:  GenerateHDLLogicVHDL:  If logic function is Trigger, include a clock.
+GenerateHDL:  For an extension, change all of the connections *from* its outputs
+to be *from* the master logic block.
+
+7/10/2018:  GenerateHDL:  get file name extension GenerateHDLLogic::generateHDLExtension
+Sort signal names by row.  
+Add some missing tool tips.
+GenerateHDLLogic:  Add abstract method generateHDLExtension.
+Remove unused field logicBlocks.
+GenerateHDLLogicVHDL:  Implement new generateHDLExtension method.
+IBM1410SMSForm:  Add menu item for generating group pages.
+GenerateGroupHDLForm, GenerateGroupHDL, GenerateGroupHDLLogic, GenerateGroupHDLLogicVHDL: 
+New classes to generate group pages.  Not yet tested.
+
+7/11/2018: GenerateHDLForm:  Order pages by name.
+GenerateHDLLogic:  Replace two underscores by 1 in generateSignalName 
+(VHDL does not allow consecutive underscores).
+GenerateHDLLogicVHDL:  Fix null pointer problem that occured if a pin used in a 
+logic block with logicFunction Special does not have a associated pin in in the gate.
+(Issue error message(s))
+GenerateGroupHDL:  Add many more logMessage calls.  Fix broken SQL.  
+Rename generateHDLGroup() to generateGroupHDL().  Make logFileName available
+as a field.  Fix broken leftSide/rightSide compares.  
+Move generateHDLArchitectureSuffix outside of the entity loop, and also
+close the log and ouput files properly.
+GenerateGroupHDLForm:  Add forgotten instantiation and invocation of 
+generateGroupHDL and log display.
+GenerateGroupHDLLogic:  Replace two underscores by 1 in generateSignalName.
+GenerateGroupHDLLogicVHDL:  Fix a few small generation errors (spacing, mostly)
+
+7/12/2018:  Volume III Data entry complete.
+  2087 Diagram Blocks (+1222)
+  4347 Sheet Edge Signal rows (+2361)
+  1078 Distrinct sheet edge signals (+598)
+  7121 Connections (+4253)
+
+7/12/2018:  EditEdgeConnectorsForm:  Remove maximum size on datagradview.
+EditDiagramLogicBlockForm:  Change title from default.
+  Change Apply button tax index to 58, right after Gate pull down.
+EditDiagramPageForm:  Implement remove button (and remove some old junk!)
+
+7/12/2018:  GenerateHDLForm:  Waits for user to close log file dispaly before proceeding.
+GenerateHDL:  Warn if a logic block uses a pin not defined for a given gate.  (This will
+prompt some clean up of mis-entered pins and/or adding some appropriate pins to gates.)
+GenerateGroupHDL, GenerateGroupHDLLogic, GenerateGroupHDLLogicVHDL:
+Handle situation where VHDL does not allow something that is an output in the PORT list
+to be read - created signals as a "buffer" for them.
+
+7/12/2018:  Allow any single character for a signal "row" to handle pages that 
+have *tons* of input signals.
+
+7/13/2018:  Fix a couple of null pointer errors when adding a new card location to
+a card location page.
+
+7/15/2018:  Ran into my first case where an intra-card connection is 
+represented as a DOT Function (Card DER, page 13.50.07.1).  
+For now, the work-around is to number the un-pinned connection with a pin 
+(in or out) that is the gate number.    (Kind of too bad that they didn't 
+just wrap that up into a single logic block, like they do with AEK cards.)
+
+7/19/2018:  EditDiagramLogicBlockForm:  Add blockConfiguration to ist of things
+checked to identify modifications.
+EditConnectionForm:  Add Cancel button to delete confirmation message box.
+EditSheetEdgeOutputConnectionsForm:  Reset data grid view row error text if
+a cell is changed.
+EditDotFunctionEdgeConnectionForm:  Fix tab order for +/- .
+EditDiagramLogicBlockForm:  Added notes field to handle the odd cases where	
+a card has an internal connection (e.g., CAP with AJ) or a cut trace/pin
+(X-J has been seen)
+EditEdgeConnectorsForm:  Cancel transaction if a card slot cannot be created
+(e.g., a connection identifying a machine not yet defined in the database,
+like the IBM 1414).   Move transaction code into applyUpdates().
+
+7/20/2018:  EditSheetEdgeOutputConnectionsForm:  Fixed an index out of range
+issue when displaying an empty populate screen, caused by previous fix on 7/19.
+EditEdgeConnectorsForm:  Included message from getting/adding card slot key
+(seem to be getting spurious messages indicating a problem getting or adding 
+card slot key)
+EditDotFunctionForm:  Fixed issue where a DOT function with connections was
+deleted (along with its connections) even if the user cancelled the delete.
+
+7/22/2018:  EditDiagramBlocksForm:  Null pointer error.  When looking up
+non 0 ECO in a card location block, it was trying to use the (nonexistant)
+diagramBlock ECO instead of the card location block ECO.
+
+7/26/2018  EditEdgeConnectors issues error messages for unknown card slots during
+   update check phase.   Ignore messages during check phase.  Also, during
+   update, only repopulate the dialog on a successful update.
+ImporterLogDisplayForm:  Cancel button anchor fix.
+
+7/27/2018:  Helpers:  Added '9' to list of valid pins, so I could use it for
+the output of the second gate group of card DFM (Gate 9).
+GenerateHDLLogicVHDL:  Added code to remember when a signal for a nopin has been
+generated, since a nopin output can go to more than one block.  Also handle
+latched outputs from nopins (nopin == intracard connection not assigned a pin)
+
+7/28/2018:  EditConnectionForm:  / key now selects the last entry in the pin list
+(typically used for -- nopin pins).
+EditDiagramLogicBlockForm:  Removed G from gate pick list, so now gate number can
+be entered to select the gate (useful for registers where we look up the gate
+number because of all of the nopin gates.)
+
+8/31/2018:  One gate of card DHP, P/N 370502 is not well depicted on ALDs.  
+The ALDs show pins B, C as an input to an inverter (which is T14, Gate 6) as 
+input to a block, along with the output of another inverter that follows the 
+NAND of PQR.  Neither input has an assigned pin on the diagram, but the 
+inverter fed by the NAND of PQR comes in on the right side as a DOT function 
+(like card AEK gates).  To make this work, I assigned a virtual pin "X" to the 
+output of the inverters fed by pins B and C, and "Y" to the output of the 
+inverter that follows the NAND of PQR.  The equation is OUT (pin a) = NOT(X) OR Y.
+
+9/1/2018:  EditEdgeConnectorsForm:  Fixed bug that allowed creation of lower case
+card slot row names.
+
+10/25/2018:  Sheets 17.11.02.1 thru 17.12.04.1 were mostly unpopulated with
+logic blocks owing to missing card location chart pages.  Used sheets to create
+card location chart entries.
+
+1/4/2019:  EditDiagramPageForm - surrounded column name "row" in ORDER BY clause
+with back-ticks - new issue with MySQL 8.  Not sure how I can fix that in a better
+way - perhaps use pattern matching looking for ORDER BY clause in query execution.
+
+1/21/2020: (wow - an entire year went by)  Made dialog EditDiagramBlocksForm that shows 
+all the blocks slightly larger so it would not need scroll bars.
+
+1/22/2020: Added a card type usage report.  Even while testing it caused me to spot 
+pin errors on some logic blocks which were corrected.  Will use this to check pins 
+on DHL and DEG (a task noted earlier)
+
+1/23/2020:  Used card type usage report to investigate gate types DEG and DHL.
+DEG Corrections to inputs or inputs and outputs to "S" on 14.30.06.1 4H,
+18.12.01.1 5A and 5D, 18.12.02.1 5A
+
+1/23/2020:  Checked error messages in Edit Card Gates, and they seem to work 
+properly.
+
+1/23/2020:  Changed EditEdgeConnectorsForm to have Environment.Newline at the end
+of all messages.
+
+TODO:  Add pages, interconnect, logic blocks, DOT functions etc. to documentation.
+
+TODO:  Performance:  Indexes for queries?
+   When displaying sheet of logic blocks
+   When changing volumes in Edit ALD Diagram
+
+TODO:  Logic Synth.  If a DOT function is fed from SDTRL NAND gates (S level) it is an
+OR.  If it is fed from DTL (NOR or NAND, depending on the diodes) gates (B Level) 
+it is an AND !!!!!   [NEED TO RETHINK THIS.  B Level?  Y Level?  It looks like for
+Y level it would still be an OR.]
+
+DONE:  EditDiagramLogicBlock:  Keep an eye on it sent a change when there is
+   none - it is probably a null vs. blank compare on the new block notes field?
+   YES - That is almost certainly what was going on.
+
+WATCH:  BUG:  EditDiagramPageForm:  cannot pre-select volume because it
+   causes an index out of range condition puzzle, and messes up ECOs.  diagnose.
+   Update:  Tried to reproduce on 1/23/2020, but was unable to do so.
+
+PENDING:  BUG:  Edit Connection.  Editing a gate to gate connection that has an
+   edge reference from the input side loses the reference.  (One ought to
+   be able to add it from the input side anyway).  It also really ought to
+   support two references, just like sheet signal edge connections.
+   (Wish I had provided an example - not sure what this was about)
+
+TODO:  Add a check box for do not generate, add flag to database, check in
+   logic synth.
+
+TODO:  Logic Synth:  WARN if a sheet edge to a DOT function is an input to
+   more than one sheet or is an output to more than one sheet.
+
+TODO:  Logic Synth:  LAMPS.  Generate signal LAMP_<name from block> as an 
+   output and assign from lamp.
+
+TODO:  Logic Synth:  Switches  
+   - Generate a bit vector[0 to n], input
+   - If we are lucky, C will always be common input (squawk if it is an output pin)
+   - Assign bits in alpha order of pins  [NOTE:  Now have them as "specials" to define pins]
+   - Typically active low (user interface can worry about that)
+
+TODO:  Logic Synth:  SS should parse the logic block title to figure out
+    the hold time, convert to microseconds or milliseconds and generate as a 
+	SPECIAL would with a name SMS_SS_[MS|US]_(time in MS or US), which would then be
+	hand coded.  OR, we could try a VHDL generic and pass the value that way,
+	which presumably would force the synthesis tool to synthesize each SS 
+	separately - which it would have to do anyway.  
+
+TODO:  Logic Synth:  If a signal flows through a resistor to a capacitor on the other side,
+   consider generating some kind of delay/debounce automagically.
+
+TODO:  Logic Synth:  Have a checklist of features - remember it.  (There are pages that
+have different cards missing generating a common signal.  Ignore cards that have a feature,
+but that feature is not in the list.)
+
+TODO:  Logic Synth:  Card type DGM will require simulation to ensure interpretation.
+Current gate defintions are just set to match ALD diagram pages.
+
+TODO:  GIT.
+
+TODO:  EditCardLocationChart should warn if more than one card location page row
+found for a given page name.
+
+TODO:  Test what happens if there is more than 1 card location page for a given page -
+   edit card location selection should warn.
+
+TODO:  Import: Card Type Import needs to accept I,O on regular pins (not just intra card pins)
+
+TODO:  The ImportCardTypes sets the machine for card ECOs to 0, instead of looking for 
+machine "SMS".
+
+TODO:  MISSING KNOWN SHEETS:  12.30.04.1, 13.64.03.1, 13.72.06.1 
+14.18.04.1, 15.41.06.1 ++ (see spreadsheet)
+
+TODO:  Add connectors table and form.
+TODO:  It seems as though editDiagramLogicBlock is using the input level to populate both
+       the input *and* output levels for a gate.
+TODO:  Warn if a given output pin is both - and + (during edit and as a separate check)
+TODO:  Verify edge connections against each other and against a connectors table.
+TODO:  Verify each edge connection is used at least once on a sheet, and only by 1 gate.
+TODO:  Check that the signals in and out match up: only 1 out, and where it goes matches
+TODO:  Check that a given transistor/gate is not used more than once (exclude resistors,
+       switches)
+TODO:  Report on unused gates/transistors (to handle above situations)
+TODO:  Report where a pin used is not actually on the selected gate (checked already in gen?)
+TODO:  Check gates that are -A/+O are NOR and +A/-O are NAND
+TODO:  Check logic gates IBM logic function (+A, IP, ...)TODO:  
+TODO:  Signal references query.  Given LIKE style signal, show all references,
+   identifying each as left or right side, with page name (or error: bad page)
+   (constrain by machine prefix?)
+TODO:  Check that a "--" (no pin) input signal comes from an edge or the same
+       gate.  (Also output / to as above).
+TODO:  EditALDDiagram form, expand size of displayed comment to at least 4 lines.
+TODO:  EditDiagramLogicBlock form:  Keyboard shortcuts to get to critical fields
+       (e.g. ALT+G to get to Gate, Alt+N to get to notes, Alt+F to get to Frame
+	   alt+M to get to Machine, Alt+T to get to type, Alt+E to get to ECO)
+TODO:  Report on cases where a given card slot contains different card types on
+       different sheets.
+TODO:  Report on cases where a given gate is used more than one time (exception for
+       Resistors)
+TODO:  Report on inconsistent gate pins + vs. -, and inconsistent load pin.
+
+TODO:  If while defining a connection pin, a key is entered, select the first/next available
+   entry that contains that pin.
+
+TODO:  See if we can spot ORDER BY clauses and surround column names with `` .
+
+ERRATA:
+
+These are things that are not errors in the application, but things that are either
+inconsistent or apparently incorrect in the IBM 1410 SMS ALDs (sometimes likely because
+some of the sheets are for a machine with the accelerator RPQ but others are not.)
+
+5/19/2018:  11.10.02.1 - There is a "Wired OR" between DEY 3B pin B and YLF 3D pin D -
+but neither one is actually open collector.  Wonder if that issue persisted on real
+machines.  (There are more cases of that in other sheets)
+
+5/29/2018:  11.20.09.1  Output signal is labeled +S I RING 1+2+5+6+10 TIME, however
+the input to pin H for the gate (2B) also includes -S I RING 7 TIME
+
+5/29/2018:  Left over deleted edge input signal +S I RING 8 TIME on 
+page 11.20.11.1 - removed.
+
+6/3/2018: 12.12.04.1 Card 9LMP 1I shows as 15A8H10, amost certainly s/b 15A1H10.
+
+6/4/2018:  12.12.30.1 has a wired or of two input signals to sheet, 
++S ARITH STOP AT F * ARITH and +S STOP AT F.  I added two dummy EQU gates,
+type JRJ1, for each input, and fed that to a wired OR.  
+Also, the signal name "+S STOP AT F" is used for two different signals.
+I renamed the one that runs between 12.12.30.1 and 12.12.32.1
+"+S STOP AT F JRJ".  These dummies were later removed, when I allowed
+DOT functions to have edge inputs.
+
+6/23/2018:  Fixup for card location pages that did not have the correct first
+line left a vestage card location page entry, database 163019 - removed. 
+(It was replaced by database entry 175464, and 163019 does not have any
+card location rows referring to it.)
+
+6/28/2018:  Cards DGA, DFZ not set up properly.  Inputs, by gate, should be
+QP, DK, EF and HR.  Main output, by gate, is B, A, C, L.  Auxiliary outputs
+on all gates are  G, J and M.
+
+6/29/2018:  Card DFD not set up properly.  Pin R is an input to Gate 4,
+along with P and Q.  Fixed.
+
+7/15/2018:  Ran into first case of card location chart and ALD logic
+diagram disagreeing about placement.  Card 11D3E03, AEK shows as sheet
+coordinate 2F on the card location chart, but 1F on the actual page.
+The ECO on the Chart is 253322, the last ECO on the seet is 253150,
+so something likely changed, but I put the logic block as identified
+on the sheet rather than the chart.
+
+7/15/2018:  Another first (seems to be the day for them.)  Sheet
+12.12.67.1 has +S E CH In PROCESS from sheet 13.60.04.1, but the
+latter sheet does not show the signal as being output to 
+12.12.67.1.  (I left it in place, with the signal present)
+
+7/19/2018:  Sheet 13.65.07.1 EC 251829 has a logic block at 3E,
+11D3E25.  However the card location chart does not show that block,
+though it does show the ones at 3D and 3F.
+
+7/22/2018:  Sheet 13.67.02.1 EC 251823 has a logic block at 3B,
+11D4F27.  The Card location chart does not show that block, but does
+have a bogus one at 13.62.02.1 
+
+[UNRESOLVED] 7/22/2018:  Sheet 13.67.02.1 EC 251823 shows output signal 
+"-S F CH INT END OF XFER DELAYED" as going to sheet 13.64.07.1 EC
+253150.  However, the latter shows the input signal as +S, not -S.
+I will use the later E.C. as the correct one for now.  Since 3B is
+the source for that signal, there is a pretty good chance that 
+said block was simply dropped in the later E.C., which is why it was
+not in the card location chart.
+
+[UNRESOLVED] 7/22/2018:  Sheet 13.67.02.1 EC 251823 shows output signal
+"+S F CH SECOND SAMPLE B" as going to sheet 13.64.05.1 EC
+251829.  However, the latter does not show that signal as an input.
+(They do agree on signal "-S F CH STATUS SAMPLE B DELAY")
+
+7/22/2018:  Sheet 13.70.02.1 EC 252637 shows a signal
+"+S 1401 CARD PRINT IN PROC" but sheet 13.60.04.1 named the
+signal "+S 1401 CARD-PRINT IN PROC".  I used the name with the space,
+even though the former is an earlier EC than the latter, because
+another sheet used the name with a space (12.12.46.1, same EC)
+
+7/25/2018:  The signal "-S 1ST DATA STROBE LATCH" was not differentiated
+by channel (sources 13.72.04.1 and 13.73.04.1)  Added "CH F" to the
+end of the F channel signal to differentiate it.  
+
+[UNRESOLVED] 7/26/2018:  Page 12.12.67.1 has an input signal
+"-S F CH FILE OP" which originates on page 13.74.01.1, however
+the latter page does not output that signal.  (Would be easy to create
+logic to do that, however)
+
+[UNRESOLVED] 7/26/2018:   Page 12.12.67.1 has an input signal
+"+S FILE OP DLY EXTENSION" which originates on page 13.74.01.1, however
+the latter page does not output that signal.
+
+9/12/2018:  The signals coming from 15.30.0[1-6].1 to 15.41.04.1 and
+15.41.07.1 did not match with their destinations.  The two destination 
+sheets had signals "+B B CH * BIT" and "+B B CH NOT * BIT" where * is
+1248AB, but the source signals were, correspondingly, "+S B CH NOT * BIT" 
+and "+S B CH * BIT".  I suspect that this is because the source pages
+are *not* for the accelerated feature, but the destination sheets are.
+The best way to deal with that sort of thing, really, would be to allow
+the same sheet number to exist, but under different ECO levels, which I
+did not plan for.  So I worked around it by adding the signals shown on
+the destination sheets, sourcing them from the same gate as the +S signal
+with the same name, and updating the source sheet to source the signal as
+expected by the destination sheet.  To be accurate, I should have added
+YLK level-shifting inverters in the process, but I did not do that yet,
+because I didn't know what slot I could use for sure.
+
+10/11/2018  Ran into some more of this.   These were from 15.30.0-1-6].1
+again, this time into 15.12.*.1
+
+10/24/2018  Card Location Chart 11.04.04.0 (1411 C 3) shows a DPV card at
+G10, sheet 16.49.05.1.  This is a typo - it should read 15.49.05.1, where
+a resistor on this card appears at sheet coordinate 1G.
+
+INFO:  NOR (DTL) Gates:  DEG, DEH, DEJ, DEK, DEL, DGL, DGM, DHL, DMN, DMX,
+DPD, DPE, DPQ, DPB, DPV, DPM, YLH, YLJ, TNL
+
+So far, only page we see using them is 12.12.46.1

@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9602352F-63F6-4DAA-9898-4340D318BC09}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>IBM1410SMS</RootNamespace>
+    <AssemblyName>IBM1410SMS</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AboutCopyrightForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutCopyrightForm.Designer.cs">
+      <DependentUpon>AboutCopyrightForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditConnectionForm.Designer.cs">
+      <DependentUpon>EditConnectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditConnectionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditConnectionsForm.Designer.cs">
+      <DependentUpon>EditConnectionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditDiagramBlocksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditDiagramBlocksForm.Designer.cs">
+      <DependentUpon>EditDiagramBlocksForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditDiagramLogicBlockForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditDiagramLogicBlockForm.Designer.cs">
+      <DependentUpon>EditDiagramLogicBlockForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditDiagramPageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditDiagramPageForm.Designer.cs">
+      <DependentUpon>EditDiagramPageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditDotFunctionEdgeConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditDotFunctionEdgeConnectionForm.Designer.cs">
+      <DependentUpon>EditDotFunctionEdgeConnectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditDotFunctionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditDotFunctionForm.Designer.cs">
+      <DependentUpon>EditDotFunctionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditEdgeConnectorsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditEdgeConnectorsForm.Designer.cs">
+      <DependentUpon>EditEdgeConnectorsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditMachinesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditMachinesForm.Designer.cs">
+      <DependentUpon>EditMachinesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditSheetEdgeOutputConnectionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditSheetEdgeOutputConnectionsForm.Designer.cs">
+      <DependentUpon>EditSheetEdgeOutputConnectionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditTieDownsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditTieDownsForm.Designer.cs">
+      <DependentUpon>EditTieDownsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditVolumeSetsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditVolumeSetsForm.Designer.cs">
+      <DependentUpon>EditVolumeSetsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\connection.cs" />
+    <Compile Include="Entities\dotfunction.cs" />
+    <Compile Include="Entities\parameters.cs" />
+    <Compile Include="Entities\sheetedgeinformation.cs" />
+    <Compile Include="GenerateGroupHDLForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerateGroupHDLForm.Designer.cs">
+      <DependentUpon>GenerateGroupHDLForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateGroupHDLLogicVHDL.cs" />
+    <Compile Include="GenerateHDL.cs" />
+    <Compile Include="GenerateHDLForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GenerateHDLForm.Designer.cs">
+      <DependentUpon>GenerateHDLForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateGroupHDL.cs" />
+    <Compile Include="GenerateGroupHDLLogic.cs" />
+    <Compile Include="GenerateHDLLogic.cs" />
+    <Compile Include="GenerateHDLLogicVHDL.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="ImportCardLocationChart.cs" />
+    <Compile Include="ImportCardTypes.cs" />
+    <Compile Include="ImportCardLocationPages.cs" />
+    <Compile Include="Importer.cs" />
+    <Compile Include="ImporterLogDisplayForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImporterLogDisplayForm.Designer.cs">
+      <DependentUpon>ImporterLogDisplayForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImportFeatures.cs" />
+    <Compile Include="EditCardLocationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditCardLocationForm.Designer.cs">
+      <DependentUpon>EditCardLocationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditCardLocationPageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditCardLocationPageForm.Designer.cs">
+      <DependentUpon>EditCardLocationPageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DBSetup.cs" />
+    <Compile Include="EditCardGatePinsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditCardGatePinsForm.Designer.cs">
+      <DependentUpon>EditCardGatePinsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditCardGatesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditCardGatesForm.Designer.cs">
+      <DependentUpon>EditCardGatesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditCardTypesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditCardTypesForm.Designer.cs">
+      <DependentUpon>EditCardTypesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditECOsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditECOsForm.Designer.cs">
+      <DependentUpon>EditECOsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditFeaturesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditFeaturesForm.Designer.cs">
+      <DependentUpon>EditFeaturesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditFramesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditFramesForm.Designer.cs">
+      <DependentUpon>EditFramesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditIBMLogicFunctionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditIBMLogicFunctionForm.Designer.cs">
+      <DependentUpon>EditIBMLogicFunctionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditLogicFamiliesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditLogicFamiliesForm.Designer.cs">
+      <DependentUpon>EditLogicFamiliesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditLogicFunctionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditLogicFunctionsForm.Designer.cs">
+      <DependentUpon>EditLogicFunctionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditLogicLevelsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditLogicLevelsForm.Designer.cs">
+      <DependentUpon>EditLogicLevelsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditMachineGatesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditMachineGatesForm.Designer.cs">
+      <DependentUpon>EditMachineGatesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditPanelsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditPanelsForm.Designer.cs">
+      <DependentUpon>EditPanelsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\cardeco.cs" />
+    <Compile Include="Entities\cardgate.cs" />
+    <Compile Include="Entities\cardlocation.cs" />
+    <Compile Include="Entities\cardlocationblock.cs" />
+    <Compile Include="Entities\cardlocationbottomnote.cs" />
+    <Compile Include="Entities\cardlocationpage.cs" />
+    <Compile Include="Entities\cardnote.cs" />
+    <Compile Include="Entities\cardslot.cs" />
+    <Compile Include="Entities\cardtype.cs" />
+    <Compile Include="Entities\diagramblock.cs" />
+    <Compile Include="Entities\diagramecotag.cs" />
+    <Compile Include="Entities\diagrampage.cs" />
+    <Compile Include="Entities\eco.cs" />
+    <Compile Include="Entities\edgeconnector.cs" />
+    <Compile Include="Entities\feature.cs" />
+    <Compile Include="Entities\frame.cs" />
+    <Compile Include="Entities\gatepin.cs" />
+    <Compile Include="Entities\ibmlogicfunction.cs" />
+    <Compile Include="Entities\idcounter.cs" />
+    <Compile Include="Entities\logicfamily.cs" />
+    <Compile Include="Entities\logicfunction.cs" />
+    <Compile Include="Entities\logiclevels.cs" />
+    <Compile Include="Entities\machine.cs" />
+    <Compile Include="Entities\machinegate.cs" />
+    <Compile Include="Entities\page.cs" />
+    <Compile Include="Entities\panel.cs" />
+    <Compile Include="Entities\tiedown.cs" />
+    <Compile Include="Entities\volume.cs" />
+    <Compile Include="Entities\volumeset.cs" />
+    <Compile Include="exceptions.cs" />
+    <Compile Include="IBM1410SMSForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IBM1410SMSForm.Designer.cs">
+      <DependentUpon>IBM1410SMSForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IBM1410SMS.cs" />
+    <Compile Include="IdCounter.cs" />
+    <Compile Include="ImportStartupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportStartupForm.Designer.cs">
+      <DependentUpon>ImportStartupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImportTieDowns.cs" />
+    <Compile Include="PanelRowColumn.cs" />
+    <Compile Include="Parms.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EditVolumeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditVolumeForm.Designer.cs">
+      <DependentUpon>EditVolumeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReportCardTypeUsageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportCardTypeUsageForm.Designer.cs">
+      <DependentUpon>ReportCardTypeUsageForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AboutCopyrightForm.resx">
+      <DependentUpon>AboutCopyrightForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditCardLocationForm.resx">
+      <DependentUpon>EditCardLocationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditCardLocationPageForm.resx">
+      <DependentUpon>EditCardLocationPageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditCardGatePinsForm.resx">
+      <DependentUpon>EditCardGatePinsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditCardGatesForm.resx">
+      <DependentUpon>EditCardGatesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditCardTypesForm.resx">
+      <DependentUpon>EditCardTypesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditConnectionForm.resx">
+      <DependentUpon>EditConnectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditConnectionsForm.resx">
+      <DependentUpon>EditConnectionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditDiagramBlocksForm.resx">
+      <DependentUpon>EditDiagramBlocksForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditDiagramLogicBlockForm.resx">
+      <DependentUpon>EditDiagramLogicBlockForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditDiagramPageForm.resx">
+      <DependentUpon>EditDiagramPageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditDotFunctionEdgeConnectionForm.resx">
+      <DependentUpon>EditDotFunctionEdgeConnectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditDotFunctionForm.resx">
+      <DependentUpon>EditDotFunctionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditECOsForm.resx">
+      <DependentUpon>EditECOsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditEdgeConnectorsForm.resx">
+      <DependentUpon>EditEdgeConnectorsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditFeaturesForm.resx">
+      <DependentUpon>EditFeaturesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditFramesForm.resx">
+      <DependentUpon>EditFramesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditIBMLogicFunctionForm.resx">
+      <DependentUpon>EditIBMLogicFunctionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditLogicFamiliesForm.resx">
+      <DependentUpon>EditLogicFamiliesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditLogicFunctionsForm.resx">
+      <DependentUpon>EditLogicFunctionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditLogicLevelsForm.resx">
+      <DependentUpon>EditLogicLevelsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditMachineGatesForm.resx">
+      <DependentUpon>EditMachineGatesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditMachinesForm.resx">
+      <DependentUpon>EditMachinesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditPanelsForm.resx">
+      <DependentUpon>EditPanelsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditSheetEdgeOutputConnectionsForm.resx">
+      <DependentUpon>EditSheetEdgeOutputConnectionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditTieDownsForm.resx">
+      <DependentUpon>EditTieDownsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditVolumeSetsForm.resx">
+      <DependentUpon>EditVolumeSetsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerateGroupHDLForm.resx">
+      <DependentUpon>GenerateGroupHDLForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GenerateHDLForm.resx">
+      <DependentUpon>GenerateHDLForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IBM1410SMSForm.resx">
+      <DependentUpon>IBM1410SMSForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImporterLogDisplayForm.resx">
+      <DependentUpon>ImporterLogDisplayForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportStartupForm.resx">
+      <DependentUpon>ImportStartupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="EditVolumeForm.resx">
+      <DependentUpon>EditVolumeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportCardTypeUsageForm.resx">
+      <DependentUpon>ReportCardTypeUsageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="COPYING" />
+    <None Include="Documentation.docx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Tools\SQLToEntity.pl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MySQLFramework\MySQLFramework.csproj">
+      <Project>{aa3271ff-9185-40f6-96f6-f8a397104ff5}</Project>
+      <Name>MySQLFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Copyright.txt" />
+    <Content Include="DevelopmentNotes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
