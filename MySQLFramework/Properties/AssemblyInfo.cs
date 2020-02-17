@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MySQLFramework")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright ©  2018, 2019, 2020 Jay R. Jaeger")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
